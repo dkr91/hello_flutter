@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_flutter/about.dart';
 import 'package:hello_flutter/basket.dart';
+import 'package:hello_flutter/my_courses.dart';
 import 'package:hello_flutter/search.dart';
 import 'package:hello_flutter/history.dart';
 import 'package:hello_flutter/studentlist.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {'about': (context) => About(), 'basket': (context) => Basket(), 'studentlist': (context) => StudentList()},
+      routes: {'about': (context) => About(), 'basket': (context) => Basket(), 'studentlist': (context) => StudentList(), 'mycourses': (context) => MyCourses()},
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -99,6 +100,13 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: new Icon(Icons.list),
             onTap: () {
               Navigator.pushNamed(context, "studentlist");
+            },
+          ),
+          ListTile(
+            title: new Text("My Courses"),
+            leading: new Icon(Icons.list),
+            onTap: () {
+              Navigator.pushNamed(context, "mycourses");
             },
           ),
           ListTile(
