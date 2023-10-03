@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hello_flutter/about.dart';
 import 'package:hello_flutter/basket.dart';
-import 'package:hello_flutter/itembasket.dart';
+import 'package:hello_flutter/search.dart';
+import 'package:hello_flutter/history.dart';
+import 'package:hello_flutter/studentlist.dart';
+
+import 'home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,10 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        'about': (context) => About(),
-        'basket': (context) => Basket()
-      },
+      routes: {'about': (context) => About(), 'basket': (context) => Basket(), 'studentlist': (context) => StudentList()},
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -66,6 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Runes emoji = Runes("\u{1F603}");
 
   int _currentIndex = 0;
+  final List<Widget> _screens = [Home(), Search(), History()];
+
+  final List<String> _titles = ['Home', 'Screen', 'History'];
 
   Widget myDrawer() {
     return Drawer(
@@ -88,6 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: new Icon(Icons.shopping_basket),
             onTap: () {
               Navigator.pushNamed(context, "basket");
+            },
+          ),
+          ListTile(
+            title: new Text("Student List"),
+            leading: new Icon(Icons.list),
+            onTap: () {
+              Navigator.pushNamed(context, "studentlist");
             },
           ),
           ListTile(
@@ -136,41 +147,9 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(_titles[_currentIndex]),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-             const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-              String.fromCharCodes(emoji) * _counter,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
+      body: _screens[_currentIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
@@ -181,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(onPressed: () {}, child: Icon(Icons.skip_next))
       ],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        currentIndex: _currentIndex,
         fixedColor: Colors.teal,
         items: [
           BottomNavigationBarItem(label: "Home", icon: Icon(Icons.home)),
@@ -189,7 +168,9 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(label: "History", icon: Icon(Icons.history))
         ],
         onTap: (int index) {
-          setState(() {});
+          setState(() {
+            _currentIndex = index;
+          });
         },
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
