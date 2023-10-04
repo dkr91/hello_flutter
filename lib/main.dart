@@ -2,16 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:hello_flutter/about.dart';
 import 'package:hello_flutter/addrecipe.dart';
 import 'package:hello_flutter/basket.dart';
+import 'package:hello_flutter/login.dart';
 import 'package:hello_flutter/my_courses.dart';
 import 'package:hello_flutter/quiz.dart';
 import 'package:hello_flutter/search.dart';
 import 'package:hello_flutter/history.dart';
 import 'package:hello_flutter/studentlist.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  checkUser().then((String result) {
+    if (result == '')
+      runApp(MyLogin());
+    else {
+      active_user = result;
+      runApp(MyApp());
+    }
+  });
+}
+
+String active_user = "";
+
+Future<String> checkUser() async {
+  final prefs = await SharedPreferences.getInstance();
+  String user_id = prefs.getString("user_id") ?? '';
+  return user_id;
 }
 
 class MyApp extends StatelessWidget {
@@ -66,6 +84,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _user_id = "";
+
   int _counter = 0;
   Runes emoji = Runes("\u{1F603}");
 
@@ -81,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text("xyz"),
-            accountEmail: Text("xyz@gmail.com"),
+            accountEmail: Text(_user_id),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
             ),
@@ -132,9 +152,22 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.pushNamed(context, "about");
             },
           ),
+          ListTile(
+            title: Text("Log Out"),
+            leading: Icon(Icons.logout),
+            onTap: () {
+              doLogout();
+            },
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> doLogout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("user_id");
+    main();
   }
 
   void _incrementCounter() {
@@ -151,6 +184,17 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_counter % 5 == 0) {
         emoji = Runes("\u{1F620}");
       }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      checkUser().then((value) => () {
+        _user_id = value;
+      });
     });
   }
 
