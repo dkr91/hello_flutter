@@ -3,6 +3,7 @@ import 'package:hello_flutter/about.dart';
 import 'package:hello_flutter/addrecipe.dart';
 import 'package:hello_flutter/basket.dart';
 import 'package:hello_flutter/my_courses.dart';
+import 'package:hello_flutter/quiz.dart';
 import 'package:hello_flutter/search.dart';
 import 'package:hello_flutter/history.dart';
 import 'package:hello_flutter/studentlist.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {'about': (context) => About(), 'basket': (context) => Basket(), 'studentlist': (context) => StudentList(), 'mycourses': (context) => MyCourses(), 'addrecipe': (context) => AddRecipe()},
+      routes: {'quiz': (context) => Quiz(), 'about': (context) => About(), 'basket': (context) => Basket(), 'studentlist': (context) => StudentList(), 'mycourses': (context) => MyCourses(), 'addrecipe': (context) => AddRecipe()},
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -115,6 +116,13 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: new Icon(Icons.add),
             onTap: () {
               Navigator.pushNamed(context, "addrecipe");
+            },
+          ),
+          ListTile(
+            title: new Text("Quiz"),
+            leading: new Icon(Icons.quiz),
+            onTap: () {
+              Navigator.pushNamed(context, "quiz");
             },
           ),
           ListTile(
