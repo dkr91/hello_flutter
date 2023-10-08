@@ -8,6 +8,7 @@ import 'package:hello_flutter/quiz.dart';
 import 'package:hello_flutter/search.dart';
 import 'package:hello_flutter/history.dart';
 import 'package:hello_flutter/studentlist.dart';
+import 'package:hello_flutter/top_score.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home.dart';
@@ -39,7 +40,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {'quiz': (context) => Quiz(), 'about': (context) => About(), 'basket': (context) => Basket(), 'studentlist': (context) => StudentList(), 'mycourses': (context) => MyCourses(), 'addrecipe': (context) => AddRecipe()},
+      routes: {
+        'quiz': (context) => Quiz(),
+        'about': (context) => About(),
+        'basket': (context) => Basket(),
+        'studentlist': (context) => StudentList(),
+        'mycourses': (context) => MyCourses(),
+        'addrecipe': (context) => AddRecipe()
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -94,6 +102,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<String> _titles = ['Home', 'Screen', 'History'];
 
+  String _top_user = "";
+  int _top_point = 0;
+
+  Future<void> getTopScore() async {
+    //later, we use web service here to check the user id and password
+    final prefs = await SharedPreferences.getInstance();
+
+    _top_user = prefs.getString("top_user") ?? "";
+    _top_point = prefs.getInt("top_point") ?? 0;
+  }
+
   Widget myDrawer() {
     return Drawer(
       elevation: 16.0,
@@ -106,59 +125,77 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
             ),
           ),
-          ListTile(
-            title: new Text("Inbox"),
-            leading: new Icon(Icons.inbox),
-          ),
-          ListTile(
-            title: new Text("My Basket"),
-            leading: new Icon(Icons.shopping_basket),
-            onTap: () {
-              Navigator.pushNamed(context, "basket");
-            },
-          ),
-          ListTile(
-            title: new Text("Student List"),
-            leading: new Icon(Icons.list),
-            onTap: () {
-              Navigator.pushNamed(context, "studentlist");
-            },
-          ),
-          ListTile(
-            title: new Text("My Courses"),
-            leading: new Icon(Icons.list),
-            onTap: () {
-              Navigator.pushNamed(context, "mycourses");
-            },
-          ),
-          ListTile(
-            title: new Text("Add Recipe"),
-            leading: new Icon(Icons.add),
-            onTap: () {
-              Navigator.pushNamed(context, "addrecipe");
-            },
-          ),
-          ListTile(
-            title: new Text("Quiz"),
-            leading: new Icon(Icons.quiz),
-            onTap: () {
-              Navigator.pushNamed(context, "quiz");
-            },
-          ),
-          ListTile(
-            title: Text("About"),
-            leading: Icon(Icons.help),
-            onTap: () {
-              Navigator.pushNamed(context, "about");
-            },
-          ),
-          ListTile(
-            title: Text("Log Out"),
-            leading: Icon(Icons.logout),
-            onTap: () {
-              doLogout();
-            },
-          ),
+          SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    title: new Text("Inbox"),
+                    leading: new Icon(Icons.inbox),
+                  ),
+                  ListTile(
+                    title: new Text("My Basket"),
+                    leading: new Icon(Icons.shopping_basket),
+                    onTap: () {
+                      Navigator.pushNamed(context, "basket");
+                    },
+                  ),
+                  ListTile(
+                    title: new Text("Student List"),
+                    leading: new Icon(Icons.list),
+                    onTap: () {
+                      Navigator.pushNamed(context, "studentlist");
+                    },
+                  ),
+                  ListTile(
+                    title: new Text("My Courses"),
+                    leading: new Icon(Icons.list),
+                    onTap: () {
+                      Navigator.pushNamed(context, "mycourses");
+                    },
+                  ),
+                  ListTile(
+                    title: new Text("Add Recipe"),
+                    leading: new Icon(Icons.add),
+                    onTap: () {
+                      Navigator.pushNamed(context, "addrecipe");
+                    },
+                  ),
+                  ListTile(
+                    title: new Text("Quiz"),
+                    leading: new Icon(Icons.quiz),
+                    onTap: () {
+                      Navigator.pushNamed(context, "quiz");
+                    },
+                  ),
+                  ListTile(
+                    title: Text("Top Score"),
+                    leading: Icon(Icons.leaderboard),
+                    onTap: () {
+                      getTopScore();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  TopScore(_top_user, _top_point)));
+                    },
+                  ),
+                  ListTile(
+                    title: Text("About"),
+                    leading: Icon(Icons.help),
+                    onTap: () {
+                      Navigator.pushNamed(context, "about");
+                    },
+                  ),
+                  ListTile(
+                    title: Text("Log Out"),
+                    leading: Icon(Icons.logout),
+                    onTap: () {
+                      doLogout();
+                    },
+                  ),
+                ],
+              )),
         ],
       ),
     );
@@ -193,8 +230,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     setState(() {
       checkUser().then((value) => () {
-        _user_id = value;
-      });
+            _user_id = value;
+          });
     });
   }
 

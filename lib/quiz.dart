@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'questionobj.dart';
+import 'main.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -19,7 +21,29 @@ class _QuizState extends State<Quiz> {
   int _question_no = Random().nextInt(10);
   int _point = 0;
 
+  String _top_user = "";
+  int _top_point = 0;
+
   List<int> _done_question = [];
+
+  Future<void> checkTopScore() async {
+    //later, we use web service here to check the user id and password
+    final prefs = await SharedPreferences.getInstance();
+
+    _top_user = prefs.getString("top_user") ?? "";
+    _top_point = prefs.getInt("top_point") ?? 0;
+
+    print("Top Point: $_top_point");
+    print("Point: $_point");
+
+    if (_top_point < _point) {
+      _top_point = _point;
+      _top_user = active_user;
+
+      prefs.setString("top_user", _top_user);
+      prefs.setInt("top_point", _top_point);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,15 +120,14 @@ class _QuizState extends State<Quiz> {
       if (answer == questions[_question_no].answer) {
         _point += 100;
       }
-      _done_question.add(_question_no);
       _question_no = randomize();
-      if (_question_no > questions.length - 1) _question_no = 0;
+      print("Check answer: $_question_no");
+      if (_done_question.length == 5) finishQuiz();
       _hitung = _initValue;
     });
   }
 
-  late Timer
-      _timer; // add “late” to initialize it later in initState() @override
+  late Timer _timer; // add “late” to initialize it later in initState() @override
 
   void startTimer() {
     _timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
@@ -150,7 +173,7 @@ class _QuizState extends State<Quiz> {
           _question_no = randomize();
           print("Question: $_question_no");
           print(_done_question);
-          if (_done_question.length > 5) finishQuiz();
+          if (_done_question.length == 5) finishQuiz();
           _hitung = _initValue;
         }
       });
@@ -160,6 +183,7 @@ class _QuizState extends State<Quiz> {
   void finishQuiz() {
      _timer.cancel();
      _question_no = 0;
+     checkTopScore();
      showDialog<String>(
          context: context,
          builder: (BuildContext context) => AlertDialog(
