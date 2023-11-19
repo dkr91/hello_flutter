@@ -5,6 +5,8 @@ import 'package:hello_flutter/basket.dart';
 import 'package:hello_flutter/login.dart';
 import 'package:hello_flutter/my_courses.dart';
 import 'package:hello_flutter/popmovie.dart';
+import 'package:hello_flutter/popularactor.dart';
+import 'package:hello_flutter/popularmovie.dart';
 import 'package:hello_flutter/quiz.dart';
 import 'package:hello_flutter/search.dart';
 import 'package:hello_flutter/history.dart';
@@ -49,7 +51,9 @@ class MyApp extends StatelessWidget {
         'basket': (context) => Basket(),
         'studentlist': (context) => StudentList(),
         'mycourses': (context) => MyCourses(),
-        'addrecipe': (context) => AddRecipe()
+        'addrecipe': (context) => AddRecipe(),
+        'popmovie': (context) => PopularMovie(),
+        'popactor': (context) => PopularActor()
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -128,7 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
             ),
           ),
-          SingleChildScrollView(
+          Expanded(
+            child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 children: <Widget>[
@@ -184,6 +189,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                   ListTile(
+                    title: Text("Popular Movie"),
+                    leading: Icon(Icons.movie),
+                    onTap: () {
+                      Navigator.pushNamed(context, "popmovie");
+                    },
+                  ),
+                  ListTile(
+                    title: Text("Popular Actor"),
+                    leading: Icon(Icons.person),
+                    onTap: () {
+                      Navigator.pushNamed(context, "popactor");
+                    },
+                  ),
+                  ListTile(
                     title: Text("About"),
                     leading: Icon(Icons.help),
                     onTap: () {
@@ -198,7 +217,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                 ],
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );

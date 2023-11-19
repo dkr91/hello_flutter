@@ -15,7 +15,7 @@ class PopularActor extends StatefulWidget {
 class _PopularActorState extends State<PopularActor> {
   Future<String> fetchData() async {
     final response = await http
-        .get(Uri.parse("https://ubaya.me/flutter/160420016/popularactor.php"));
+        .get(Uri.parse("https://ubaya.me/react/160420016/popularactor.php"));
     if (response.statusCode == 200) {
       return response.body;
     } else {
