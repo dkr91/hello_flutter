@@ -4,6 +4,7 @@ import 'package:hello_flutter/addrecipe.dart';
 import 'package:hello_flutter/basket.dart';
 import 'package:hello_flutter/login.dart';
 import 'package:hello_flutter/my_courses.dart';
+import 'package:hello_flutter/popmovie.dart';
 import 'package:hello_flutter/quiz.dart';
 import 'package:hello_flutter/search.dart';
 import 'package:hello_flutter/history.dart';
@@ -24,6 +25,8 @@ void main() {
     }
   });
 }
+
+List<PopMovie> PMs = [];
 
 String active_user = "";
 
