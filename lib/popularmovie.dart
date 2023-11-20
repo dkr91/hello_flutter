@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_flutter/detailpop.dart';
 import 'package:hello_flutter/main.dart';
+import 'package:hello_flutter/newmovie.dart';
 import 'package:hello_flutter/popmovie.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,12 +50,12 @@ class _PopularMovieState extends State<PopularMovie> {
       return ListView.builder(
           itemCount: PopMovs.length,
           itemBuilder: (BuildContext ctxt, int index) {
-            return new Card(
+            return Card(
                 child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.movie, size: 30),
+                  leading: const Icon(Icons.movie, size: 30),
                   title: GestureDetector(
                     child: Text(PMs[index].title),
                     onTap: () {
@@ -87,12 +88,12 @@ class _PopularMovieState extends State<PopularMovie> {
     return ListView.builder(
         itemCount: PMs2.length,
         itemBuilder: (BuildContext ctxt, int index) {
-          return new Card(
+          return Card(
               child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.movie, size: 30),
+                leading: const Icon(Icons.movie, size: 30),
                 title: GestureDetector(
                   child: Text(PMs[index].title),
                   onTap: () {
@@ -121,6 +122,15 @@ class _PopularMovieState extends State<PopularMovie> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Newmovie()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
       appBar: AppBar(
         title: const Text('Popular Movie'),
       ),
