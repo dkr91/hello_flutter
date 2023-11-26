@@ -22,6 +22,17 @@ class _DetailPopState extends State<DetailPop> {
     bacaData();
   }
 
+  Future<String> deleteRequest() async {
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/react/160420016/deletemovie.php"),
+        body: {'id': widget.movieID.toString()});
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Failed to read API');
+    }
+  }
+
   Future<String> fetchData() async {
     final response = await http.post(
         Uri.parse("https://ubaya.me/react/160420016/detailmovie.php"),
@@ -38,6 +49,20 @@ class _DetailPopState extends State<DetailPop> {
       Map json = jsonDecode(value);
       _pm = PopMovie.fromJson(json['data']);
       setState(() {});
+    });
+  }
+
+  hapusData() {
+    deleteRequest().then((value) {
+      Map json = jsonDecode(value);
+      if (json['result'] == 'success') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Movie Deleted')));
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Error')));
+      }
     });
   }
 
@@ -96,6 +121,14 @@ class _DetailPopState extends State<DetailPop> {
         appBar: AppBar(
           title: const Text('Detail of Popular Movie'),
         ),
-        body: ListView(children: <Widget>[tampilData()]));
+        body: ListView(children: <Widget>[
+          tampilData(),
+          FilledButton(
+            onPressed: () {
+              hapusData();
+            },
+            child: const Text("Delete Movie"),
+          ),
+        ]));
   }
 }

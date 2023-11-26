@@ -65,7 +65,11 @@ class _PopularMovieState extends State<PopularMovie> {
                           builder: (context) =>
                               DetailPop(movieID: PMs[index].id),
                         ),
-                      );
+                      ).then((value) {
+                        setState(() {
+                          bacaData();
+                        });
+                      });
                     },
                   ),
                   subtitle: Text(PopMovs[index].overview),
@@ -102,7 +106,9 @@ class _PopularMovieState extends State<PopularMovie> {
                       MaterialPageRoute(
                         builder: (context) => DetailPop(movieID: PMs[index].id),
                       ),
-                    );
+                    ).then((value) {
+                      bacaData();
+                    });
                   },
                 ),
                 subtitle: Text(PMs2[index].overview),

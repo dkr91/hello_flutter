@@ -22,20 +22,22 @@ class _NewmovieState extends State<Newmovie> {
   final _controllerDate = TextEditingController();
 
   void submit() async {
-    final response = await http
-        .post(Uri.parse("http://localhost/movies/newmovie.php"), body: {
-      'title': _title,
-      'overview': _overview,
-      'homepage': _homepage,
-      'release_date': _controllerDate.text,
-      'runtime': _runtime.toString(),
-    });
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/react/160420016/newmovie.php"),
+        body: {
+          'title': _title,
+          'overview': _overview,
+          'homepage': _homepage,
+          'release_date': _controllerDate.text,
+          'runtime': _runtime.toString(),
+        });
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         if (!mounted) return;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Sukses Menambah Data')));
+        Navigator.pop(context);
       }
     } else {
       ScaffoldMessenger.of(context)
