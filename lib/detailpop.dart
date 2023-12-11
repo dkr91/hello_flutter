@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_flutter/editpopmovie.dart';
 import 'package:hello_flutter/popmovie.dart';
 import 'package:http/http.dart' as http;
 
@@ -93,7 +94,7 @@ class _DetailPopState extends State<DetailPop> {
                 shrinkWrap: true,
                 itemCount: _pm?.genres?.length,
                 itemBuilder: (BuildContext ctxt, int index) {
-                  return Text(_pm?.genres?[index]['genre_name']);
+                  return Text(_pm?.genres?[index]?.genre_name ?? "");
                 }),
           ),
           Padding(
@@ -123,6 +124,20 @@ class _DetailPopState extends State<DetailPop> {
         ),
         body: ListView(children: <Widget>[
           tampilData(),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: ElevatedButton(
+              child: const Text('Edit'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditPopMovie(movieID: widget.movieID),
+                  ),
+                );
+              },
+            ),
+          ),
           FilledButton(
             onPressed: () {
               hapusData();
