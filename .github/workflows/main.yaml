@@ -17,6 +17,9 @@ jobs:
 
       - name: Version
         run: flutter --version
+
+      - name: Upgrade
+        run: flutter upgrade
         
       - name: Get dependencies
         run: flutter pub get
