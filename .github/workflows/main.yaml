@@ -14,6 +14,10 @@ jobs:
         with:
           flutter-version: '3.7.7'
           channel: 'stable'
+
+      - name: Version
+        run: flutter --version
+        
       - name: Get dependencies
         run: flutter pub get
 
